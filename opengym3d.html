@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#101714">
+  <meta name="description" content="A browser-based 3D workout animation viewer, using OpenGym3D as an external project preview.">
+  <title>Workout Motion · 3D Browser Preview</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101714; --panel:#18231e; --line:#2a3830; --text:#f1f4ef; --muted:#9caea3; --lime:#d6f27a; --teal:#62c7a0; }
+    * { box-sizing:border-box; }
+    html { min-width:320px; background:var(--bg); }
+    body { margin:0; color:var(--text); background:radial-gradient(ellipse at 80% -20%, #284435 0, transparent 45%), var(--bg); font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    a { color:inherit; }
+    .shell { width:min(1480px, calc(100% - 42px)); margin:0 auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:18px; min-height:72px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .brand { display:flex; align-items:center; gap:11px; font-weight:850; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; font-size:11px; }
+    .brand-mark { width:30px; height:30px; display:grid; place-items:center; border:1px solid rgba(214,242,122,.48); border-radius:10px; color:var(--lime); font-size:15px; }
+    .brand-mark::before { content:"3D"; font-size:9px; font-weight:900; letter-spacing:0; }
+    .toplinks { display:flex; align-items:center; gap:9px; flex-wrap:wrap; justify-content:flex-end; }
+    .toplink { display:inline-flex; align-items:center; gap:7px; min-height:34px; padding:0 12px; border:1px solid var(--line); border-radius:9px; color:#c9d4cc; text-decoration:none; font-size:10px; font-weight:800; transition:.18s; }
+    .toplink:hover { border-color:#66816f; color:white; background:rgba(255,255,255,.04); }
+    .hero { display:flex; align-items:flex-end; justify-content:space-between; gap:25px; padding:34px 0 22px; }
+    .eyebrow { display:flex; align-items:center; gap:8px; margin-bottom:10px; color:var(--lime); font-size:9px; font-weight:900; letter-spacing:.17em; text-transform:uppercase; }
+    .pulse { width:7px; height:7px; border-radius:99px; background:var(--teal); box-shadow:0 0 0 4px rgba(98,199,160,.12); }
+    h1 { margin:0; font-size:clamp(29px,4vw,48px); letter-spacing:-.06em; line-height:1; }
+    .hero p { max-width:650px; margin:12px 0 0; color:var(--muted); font-size:12px; line-height:1.7; }
+    .hero-note { max-width:275px; padding:12px 15px; border:1px solid rgba(214,242,122,.2); border-radius:12px; background:rgba(214,242,122,.05); color:#d0dfd2; font-size:10px; line-height:1.55; }
+    .hero-note strong { display:block; margin-bottom:4px; color:var(--lime); font-size:9px; letter-spacing:.12em; text-transform:uppercase; }
+    .viewer-heading { display:flex; align-items:center; justify-content:space-between; gap:18px; margin:2px 0 9px; color:#bac8bd; font-size:10px; font-weight:850; letter-spacing:.1em; text-transform:uppercase; }
+    .viewer-heading span:last-child { color:#7e9185; font-size:9px; font-weight:700; letter-spacing:.04em; text-transform:none; }
+    .frame-wrap { height:min(76vh, 850px); min-height:550px; overflow:hidden; border:1px solid #33443a; border-radius:16px; background:#0b0d10; box-shadow:0 28px 90px rgba(0,0,0,.32); }
+    iframe { display:block; width:100%; height:100%; border:0; background:#0b0d10; }
+    .disclosure { display:flex; justify-content:space-between; gap:18px; margin:12px 0 0; padding:0 3px; color:#829287; font-size:9px; line-height:1.6; }
+    .disclosure a { color:#c3d1c6; }
+    footer { display:flex; justify-content:space-between; gap:14px; margin-top:22px; padding:16px 0 25px; border-top:1px solid rgba(255,255,255,.08); color:#77877d; font-size:9px; }
+    footer a { color:#bdcbbf; text-decoration:none; }
+    @media (max-width:720px) {
+      .shell { width:calc(100% - 24px); }
+      .topbar { min-height:64px; }
+      .brand { font-size:9px; }
+      .brand-mark { width:27px; height:27px; }
+      .toplink { min-height:31px; padding:0 9px; font-size:9px; }
+      .hero { display:block; padding-top:26px; }
+      .hero-note { max-width:none; margin-top:15px; }
+      .frame-wrap { height:70vh; min-height:480px; border-radius:12px; }
+      .disclosure, footer { display:block; }
+      footer span { display:block; margin-top:5px; }
+    }
+    @media (max-width:420px) {
+      .toplinks { gap:5px; }
+      .toplink { padding:0 7px; font-size:8px; }
+      .frame-wrap { min-height:420px; height:68vh; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar shell">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>Workout motion · preview</span></a>
+    <nav class="toplinks" aria-label="Project links">
+      <a class="toplink" href="https://assiamahs.github.io/opengym3d/" target="_blank" rel="noopener noreferrer">Open 3D viewer ↗</a>
+      <a class="toplink" href="./prototype.html">Original 2D prototype</a>
+    </nav>
+  </header>
+  <main class="shell" id="top">
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><i class="pulse" aria-hidden="true"></i> WEBGL · SKINNED 3D CHARACTER</div>
+        <h1>Now in 3D.</h1>
+        <p>The preview now embeds OpenGym3D, a separate browser-based exercise project with a real 3D character and GLB motion. This is a change of direction from the stick-figure prototype—not a recreation of Leap Fitness’ character or a claim that its animations were reverse-engineered.</p>
+      </div>
+      <aside class="hero-note"><strong>Asset-use note</strong>The viewer’s code is MIT-licensed, but individual models and motion clips have separate terms. Check the project’s asset registry before downloading or reusing any specific animation.</aside>
+    </section>
+    <div class="viewer-heading"><span>OpenGym3D · live web viewer</span><span>If the embed is blocked, use “Open 3D viewer” above.</span></div>
+    <section class="frame-wrap" aria-label="Embedded OpenGym3D viewer">
+      <iframe src="https://assiamahs.github.io/opengym3d/" title="OpenGym3D interactive exercise animation viewer" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups" allow="fullscreen; web-share"></iframe>
+    </section>
+    <p class="disclosure"><span>OpenGym3D is maintained by its own authors and served from GitHub Pages; this project embeds it rather than redistributing its motion files.</span><span><a href="https://github.com/AssiamahS/opengym3d/blob/main/assets/ASSET_LIBRARY.json" target="_blank" rel="noopener noreferrer">Per-asset license registry ↗</a></span></p>
+    <footer><span>Current preview: external 3D web project · not the target app</span><span><a href="./prototype.html">Keep the original SVG prototype available ↗</a></span></footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{
+  "title": "Motion Library — original workout loops",
+  "format": "self-contained animated SVG (SMIL)",
+  "generated": "2026-10-19",
+  "count": 8,
+  "assets": [
+    {
+      "id": "jumping-jacks",
+      "name": "Jumping jacks",
+      "file": "jumping-jacks.svg",
+      "category": "Cardio",
+      "muscle": "Full body",
+      "level": "Beginner",
+      "accent": "#8b7cff",
+      "cue": "Land softly; keep your ribs stacked over your hips."
+    },
+    {
+      "id": "bodyweight-squat",
+      "name": "Bodyweight squat",
+      "file": "bodyweight-squat.svg",
+      "category": "Strength",
+      "muscle": "Quads · glutes",
+      "level": "Beginner",
+      "accent": "#ff8569",
+      "cue": "Press through the whole foot; let your knees track over your toes."
+    },
+    {
+      "id": "push-up",
+      "name": "Push-up",
+      "file": "push-up.svg",
+      "category": "Strength",
+      "muscle": "Chest · arms",
+      "level": "Intermediate",
+      "accent": "#51b8a6",
+      "cue": "Keep your body in one long line from shoulders to heels."
+    },
+    {
+      "id": "reverse-lunge",
+      "name": "Reverse lunge",
+      "file": "reverse-lunge.svg",
+      "category": "Lower body",
+      "muscle": "Glutes · legs",
+      "level": "Beginner",
+      "accent": "#f3b94f",
+      "cue": "Step back quietly; keep your front knee comfortably aligned."
+    },
+    {
+      "id": "mountain-climber",
+      "name": "Mountain climber",
+      "file": "mountain-climber.svg",
+      "category": "Cardio",
+      "muscle": "Core · shoulders",
+      "level": "Intermediate",
+      "accent": "#78a9ff",
+      "cue": "Brace your core and keep your shoulders over your hands."
+    },
+    {
+      "id": "glute-bridge",
+      "name": "Glute bridge",
+      "file": "glute-bridge.svg",
+      "category": "Core",
+      "muscle": "Glutes · core",
+      "level": "Beginner",
+      "accent": "#ed83b8",
+      "cue": "Lift from your hips; keep your ribs relaxed and feet grounded."
+    },
+    {
+      "id": "crunch",
+      "name": "Crunch",
+      "file": "crunch.svg",
+      "category": "Core",
+      "muscle": "Abdominals",
+      "level": "Beginner",
+      "accent": "#ff8569",
+      "cue": "Curl your shoulders up; avoid pulling on your neck."
+    },
+    {
+      "id": "calf-raise",
+      "name": "Calf raise",
+      "file": "calf-raise.svg",
+      "category": "Lower body",
+      "muscle": "Calves",
+      "level": "Beginner",
+      "accent": "#51b8a6",
+      "cue": "Rise through the balls of your feet; lower with control."
+    }
+  ]
+}

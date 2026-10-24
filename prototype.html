@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f5f5ef">
+  <meta name="description" content="A small, original vector motion library for bodyweight exercise interfaces.">
+  <title>Motion Library — Original Workout Loops</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.mjs"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+      <a class="brand" href="#top" aria-label="Motion Library home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span><span class="brand-word">Motion Library</span><span class="brand-sub">original exercise loops</span></span>
+      </a>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="#library">Library</a>
+        <a href="#integration">Integration</a>
+        <span class="top-badge"><i class="status-dot" aria-hidden="true"></i>8 loops · prototype</span>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-panel">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> WEB-READY · NO DEPENDENCIES</div>
+          <h1 id="hero-title">Movement,<br>made <em>yours.</em></h1>
+          <p>A hand-authored set of simplified stick-figure loops for prototyping a workout UI. These original approximations are not the linked app’s character or a faithful reproduction of its motions.</p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="#library">Explore the library <span aria-hidden="true">↘</span></a>
+            <a class="btn-ghost" href="#integration">See how to use it <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Featured original jumping jack animation">
+          <div class="hero-art-stage" id="hero-stage"></div>
+          <div class="hero-note"><span class="hero-note-icon" aria-hidden="true">↗</span><span><strong>Jumping jacks</strong><span>01 / CARDIO · LOOPING SVG</span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proofbar" aria-label="Library details">
+      <div class="proof-item"><span class="proof-number">01</span><span><strong>8 pose loops</strong><small>approximate originals</small></span></div>
+      <div class="proof-item"><span class="proof-number">02</span><span><strong>Standalone SVG</strong><small>for UI prototyping</small></span></div>
+      <div class="proof-item"><span class="proof-number">03</span><span><strong>No external assets</strong><small>no CDN or font dependency</small></span></div>
+      <div class="proof-item"><span class="proof-number">04</span><span><strong>Motion-aware</strong><small>reduced-motion support</small></span></div>
+    </section>
+
+    <section id="library" aria-labelledby="library-title">
+      <div class="section-head">
+        <div><div class="section-kicker">THE LIBRARY / 01—08</div><h2 id="library-title">Choose your movement.</h2></div>
+        <p>Preview a loop, adjust the pace, then download the individual SVG or copy a ready-to-use embed snippet.</p>
+      </div>
+      <div class="library-tools">
+        <div class="filters" id="filters" role="group" aria-label="Filter exercises"></div>
+        <div class="tool-group">
+          <label class="search-box" aria-label="Search exercises">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m13 13 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <input id="search" type="search" placeholder="Find a movement…" autocomplete="off">
+          </label>
+          <label class="visually-hidden" for="speed">Animation speed</label>
+          <select class="select-speed" id="speed" aria-label="Animation speed">
+            <option value="0.75">0.75×</option><option value="1" selected>1× speed</option><option value="1.25">1.25×</option>
+          </select>
+          <button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="false">Pause motion</button>
+        </div>
+      </div>
+      <div class="exercise-grid" id="exercise-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="howto" id="integration" aria-labelledby="integration-title">
+      <div>
+        <div class="section-kicker">DROP-IN READY</div>
+        <h2 id="integration-title">One SVG. Your interface.</h2>
+        <p>Each export is self-contained: paths, timing, and colors live in the file. Use it as an image anywhere, or inline it when you want to control playback with JavaScript.</p>
+      </div>
+      <div class="code-card">
+        <div class="code-label">HTML · simplest embed</div>
+        <button class="copy-mini" id="copy-example" type="button">Copy snippet</button>
+        <code id="embed-example">&lt;img
+  src="./assets/jumping-jacks.svg"
+  alt="Simplified jumping-jacks animation prototype"
+  width="220" height="220"
+&gt;</code>
+      </div>
+    </section>
+    <p class="disclosure">Prototype only: these original stick figures are not the linked app’s character or choreography, and their motion has not been validated for exercise form. Do not use them as coaching or medical guidance.</p>
+
+    <footer class="footer"><span><strong>MOTION / LIBRARY</strong> · Original vector motion for the web</span><span>Self-contained SVG · HTML · CSS · JavaScript</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

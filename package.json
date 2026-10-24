@@ -1,0 +1,12 @@
+{
+  "name": "workout-motion-exercise-library",
+  "version": "1.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Ten source-animated 3D exercise clips with exercise-specific schematic muscle maps",
+  "scripts": {
+    "build": "node scripts/export-assets.mjs",
+    "test": "node --test",
+    "start": "python3 -m http.server 4173 --bind 0.0.0.0"
+  }
+}

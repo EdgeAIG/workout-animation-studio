@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#101714">
+  <meta name="description" content="Ten real 3D exercise motion clips with per-exercise front and back muscle maps.">
+  <title>10 Exercise Motion Lab · 3D</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.js",
+        "three/addons/": "./vendor/three/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="./src/exercise-library.mjs"></script>
+  <style>
+    :root { color-scheme:dark; --bg:#101714; --panel:#19231e; --panel2:#1e2b24; --line:#2c3b32; --ink:#f0f4ed; --muted:#9bada2; --lime:#d6f27a; --mint:#70d1aa; --red:#ef655f; --gold:#f0b65e; }
+    * { box-sizing:border-box; }
+    html { min-width:320px; background:var(--bg); scroll-behavior:smooth; }
+    body { margin:0; background:radial-gradient(ellipse at 77% -18%, #2a4435 0, transparent 42%),var(--bg); color:var(--ink); font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    button,select,input { font:inherit; } button { cursor:pointer; } a { color:inherit; }
+    .shell { width:min(1320px,calc(100% - 42px)); margin:0 auto; }
+    .topbar { min-height:70px; display:flex; align-items:center; justify-content:space-between; gap:18px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; font-size:10px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+    .brand-mark { display:grid; place-items:center; width:31px; height:31px; border:1px solid rgba(214,242,122,.4); border-radius:10px; color:var(--lime); font-size:9px; letter-spacing:0; }
+    .nav-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+    .nav-link { padding:7px 11px; border:1px solid var(--line); border-radius:9px; color:#c5d1c8; text-decoration:none; font-size:9px; font-weight:800; transition:.18s; }
+    .nav-link:hover { border-color:#617865; background:rgba(255,255,255,.04); }
+    .intro { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding:30px 0 21px; }
+    .kicker { display:flex; align-items:center; gap:8px; margin-bottom:10px; color:var(--lime); font-size:9px; font-weight:900; letter-spacing:.16em; text-transform:uppercase; }
+    .live-dot { width:7px; height:7px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px rgba(112,209,170,.12); }
+    h1 { margin:0; font-size:clamp(33px,4.6vw,56px); letter-spacing:-.065em; line-height:1; }
+    .intro p { max-width:720px; margin:12px 0 0; color:var(--muted); font-size:12px; line-height:1.7; }
+    .count-badge { flex:0 0 auto; padding:9px 13px; border:1px solid rgba(214,242,122,.28); border-radius:999px; background:rgba(214,242,122,.06); color:var(--lime); font-size:9px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
+    .count-badge span { color:#b5c6bb; font-weight:700; letter-spacing:0; text-transform:none; }
+    .workbench { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(285px,.7fr); gap:15px; align-items:stretch; }
+    .stage-card,.side-card,.exercise-card { overflow:hidden; border:1px solid var(--line); border-radius:16px; background:rgba(24,34,29,.95); box-shadow:0 21px 60px rgba(0,0,0,.2); }
+    .stage-head { display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:47px; padding:0 15px; border-bottom:1px solid rgba(255,255,255,.07); color:#c7d3ca; font-size:9px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+    .status { display:flex; align-items:center; gap:7px; color:#91a298; font-size:9px; font-weight:700; letter-spacing:0; text-transform:none; white-space:nowrap; }
+    .status::before { content:""; width:6px; height:6px; border-radius:50%; background:#829184; }
+    .status.ready::before { background:var(--mint); box-shadow:0 0 0 3px rgba(112,209,170,.12); }
+    .status.error::before { background:#ed806c; }
+    #viewport { height:min(58vh,610px); min-height:420px; position:relative; overflow:hidden; background:radial-gradient(ellipse at 50% 38%,#2a3932 0,#161e1a 52%,#111714 100%); touch-action:none; }
+    #viewport canvas { display:block; width:100%; height:100%; outline:none; }
+    .loading { position:absolute; inset:0; z-index:4; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:11px; background:rgba(16,23,20,.88); color:#d5e0d7; text-align:center; font-size:11px; transition:opacity .25s ease; }
+    .loading.hidden { opacity:0; pointer-events:none; }
+    .spinner { width:25px; height:25px; border:2px solid rgba(214,242,122,.18); border-top-color:var(--lime); border-radius:50%; animation:spin .9s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .loading small { max-width:300px; color:#91a298; font-size:9px; line-height:1.6; }
+    .phase-overlay { position:absolute; z-index:2; top:15px; left:15px; width:min(310px,calc(100% - 30px)); padding:11px 13px; border:1px solid rgba(255,255,255,.1); border-radius:12px; background:rgba(13,20,16,.74); backdrop-filter:blur(10px); pointer-events:none; }
+    .phase-kicker { margin-bottom:3px; color:var(--lime); font-size:8px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+    #phase-title { display:block; font-size:13px; font-weight:900; letter-spacing:-.02em; }
+    #phase-cue { display:block; margin-top:3px; color:#b4c3b9; font-size:9px; line-height:1.45; }
+    .stage-foot { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:9px; padding:10px 14px; border-top:1px solid rgba(255,255,255,.06); color:#9aaba0; font-size:9px; }
+    .legend { display:flex; flex-wrap:wrap; align-items:center; gap:11px; }
+    .legend-item { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+    .swatch { width:9px; height:9px; border-radius:50%; }
+    .swatch.primary { background:var(--red); box-shadow:0 0 0 3px rgba(239,101,95,.12); }
+    .swatch.secondary { background:var(--gold); box-shadow:0 0 0 3px rgba(240,182,94,.12); }
+    .swatch.rest { background:#aab8b1; }
+    .playbar { display:flex; align-items:center; gap:11px; padding:11px 14px; border-top:1px solid rgba(255,255,255,.07); }
+    .play-button { display:grid; place-items:center; width:38px; height:34px; flex:0 0 auto; border:1px solid #405346; border-radius:9px; background:#243229; color:var(--lime); font-size:13px; }
+    .play-button:hover { background:#2b3c30; }
+    .scrub { flex:1; min-width:65px; accent-color:var(--lime); }
+    .time-readout { width:78px; color:#a6b5ab; font:9px ui-monospace,SFMono-Regular,Menlo,monospace; text-align:right; }
+    .side-panel { display:flex; flex-direction:column; gap:11px; }
+    .side-card { padding:15px; }
+    .micro-label { margin-bottom:6px; color:#8b9e91; font-size:8px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+    .selected-title-row { display:flex; align-items:flex-start; gap:11px; }
+    .selected-number { display:grid; place-items:center; flex:0 0 auto; width:35px; height:35px; border:1px solid rgba(214,242,122,.23); border-radius:10px; background:rgba(214,242,122,.07); color:var(--lime); font-size:10px; font-weight:900; }
+    #exercise-title { margin:0; font-size:20px; line-height:1.15; letter-spacing:-.045em; }
+    .selected-meta { margin-top:4px; color:#93a398; font-size:9px; }
+    #exercise-description { margin:10px 0 0; color:#a8b7ad; font-size:10px; line-height:1.65; }
+    .muscle-card { padding:13px 14px; border:1px solid rgba(255,255,255,.07); border-radius:12px; background:#141d18; }
+    .muscle-row + .muscle-row { margin-top:11px; }
+    .muscle-row-label { display:flex; align-items:center; gap:7px; margin-bottom:6px; color:#a8b8ad; font-size:8px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
+    .group-list { display:flex; flex-wrap:wrap; gap:5px; }
+    .group-chip { display:inline-flex; align-items:center; gap:6px; padding:5px 8px; border:1px solid #34433a; border-radius:999px; background:#1d2922; color:#d6e0d7; font-size:8px; font-weight:750; }
+    .group-chip::before { content:""; width:6px; height:6px; flex:0 0 auto; border-radius:50%; background:var(--red); }
+    .group-chip.secondary::before { background:var(--gold); }
+    .group-empty { color:#819187; font-size:9px; }
+    .muscle-note { margin:10px 0 0; color:#7f9085; font-size:8px; line-height:1.55; }
+    .bodymap-wrap { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; margin-top:10px; padding:8px 5px 5px; border:1px solid rgba(255,255,255,.07); border-radius:11px; background:#111914; }
+    .bodymap { min-width:0; margin:0; text-align:center; }
+    .bodymap svg { display:block; height:126px; max-width:100%; width:auto; margin:0 auto; }
+    .bodymap figcaption { margin-top:2px; color:#8e9f94; font-size:7px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .silhouette { fill:#202b24; stroke:#435247; stroke-width:1.5; }
+    .rg { stroke:none; }
+    .rg.rest { fill:#354139; }
+    .rg.primary { fill:var(--red); }
+    .rg.secondary { fill:var(--gold); }
+    .steps-heading { margin:0 0 8px; color:#e5ece5; font-size:11px; font-weight:900; }
+    #steps { display:grid; gap:7px; margin:0; padding:0; list-style:none; counter-reset:move; }
+    #steps li { position:relative; min-height:23px; padding-left:28px; color:#b3c0b7; font-size:9px; line-height:1.55; counter-increment:move; }
+    #steps li::before { content:counter(move); position:absolute; left:0; top:0; display:grid; place-items:center; width:18px; height:18px; border:1px solid #3b5042; border-radius:6px; color:var(--lime); font-size:8px; font-weight:900; }
+    .source-pill { display:inline-flex; align-items:center; flex-wrap:wrap; gap:6px; max-width:100%; margin-top:11px; padding:6px 8px; border:1px solid #36483c; border-radius:7px; color:#a9b9ad; background:rgba(255,255,255,.025); font-size:8px; font-weight:750; line-height:1.35; }
+    .source-pill::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--mint); }
+    .source-pill.remote-only::before { background:var(--gold); }
+    .controls-card { display:flex; flex-direction:column; gap:11px; }
+    .control-label { display:flex; justify-content:space-between; gap:12px; margin-bottom:6px; color:#c4d0c7; font-size:9px; font-weight:800; }
+    .speed-select { width:100%; height:34px; padding:0 9px; border:1px solid #38483d; border-radius:8px; background:#111a15; color:#dae3db; font-size:9px; }
+    .view-buttons { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+    .view-button { min-height:31px; border:1px solid #334338; border-radius:8px; background:#111a15; color:#a8b8ad; font-size:8px; font-weight:850; }
+    .view-button:hover,.view-button[aria-pressed="true"] { border-color:#738967; color:var(--lime); background:#253329; }
+    .library { margin-top:22px; }
+    .library-head { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:11px; }
+    .library-head h2 { margin:0; font-size:19px; letter-spacing:-.04em; }
+    .library-head p { margin:3px 0 0; color:#91a298; font-size:9px; }
+    .library-count { color:#91a298; font-size:9px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; }
+    #exercise-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:9px; }
+    .exercise-card { position:relative; display:flex; flex-direction:column; min-height:0; padding:0; border-radius:12px; text-align:left; color:var(--ink); transition:transform .16s,border-color .16s,background .16s; }
+    .exercise-card:hover { transform:translateY(-2px); border-color:#5c755f; background:#202d25; }
+    .exercise-card[aria-pressed="true"] { border-color:rgba(214,242,122,.75); background:linear-gradient(155deg,rgba(214,242,122,.11),rgba(25,35,30,.98) 70%); box-shadow:0 0 0 1px rgba(214,242,122,.08); }
+    .card-thumb { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:linear-gradient(135deg,#283a30,#131a16); }
+    .card-thumb.thumb-unavailable { opacity:.35; }
+    .card-motion-badge { position:absolute; top:7px; left:7px; padding:4px 6px; border:1px solid rgba(255,255,255,.16); border-radius:6px; background:rgba(10,15,12,.78); color:#e6efdf; font-size:7px; font-weight:900; letter-spacing:.1em; }
+    .card-meta { padding:10px 11px 12px; }
+    .card-top { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:7px; }
+    .card-number { color:var(--lime); font:800 8px ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .card-category { max-width:75%; overflow:hidden; padding:3px 6px; border:1px solid #35473b; border-radius:999px; color:#a5b7a8; font-size:7px; font-weight:800; text-overflow:ellipsis; white-space:nowrap; }
+    .card-title { margin:0; font-size:12px; font-weight:900; line-height:1.25; }
+    .card-focus { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; }
+    .card-focus span { color:#a6b5ab; font-size:8px; }
+    .card-focus span.primary-focus { color:#f08a7f; font-weight:800; }
+    .footer { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:19px; padding:13px 0 20px; border-top:1px solid rgba(255,255,255,.08); color:#75857a; font-size:8px; line-height:1.6; }
+    .footer a { color:#afbeb3; text-decoration:none; }
+    .footer a:hover { color:var(--lime); }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible { outline:2px solid var(--lime); outline-offset:2px; }
+    @media(max-width:1000px) { .workbench { grid-template-columns:minmax(0,1.3fr) minmax(270px,.85fr); } #exercise-grid { grid-template-columns:repeat(5,minmax(0,1fr)); } }
+    @media(max-width:850px) { .workbench { grid-template-columns:1fr; } .side-panel { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; } .side-panel .selected-card,.side-panel .steps-card { grid-column:span 1; } .side-panel .muscle-card,.side-panel .controls-card { grid-column:span 1; } #viewport { height:54vh; } #exercise-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+    @media(max-width:600px) { .shell { width:calc(100% - 22px); } .topbar { min-height:61px; } .nav-link { padding:6px 8px; font-size:8px; } .intro { display:block; padding:25px 0 17px; } .count-badge { display:inline-block; margin-top:13px; } #viewport { min-height:350px; height:52vh; } .side-panel { display:flex; } #exercise-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .stage-head { padding:0 10px; font-size:8px; } .stage-foot { padding:9px 10px; } .time-readout { width:70px; } .library-head h2 { font-size:17px; } }
+    @media(max-width:600px) { .bodymap svg { height:138px; } .bodymap-wrap { max-width:360px; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; } .spinner { animation:none; } }
+  </style>
+</head>
+<body>
+  <header class="topbar shell">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">3D</span><span>Motion lab</span></a>
+    <nav class="nav-links" aria-label="Project links">
+      <a class="nav-link" href="./opengym3d.html">OpenGym3D library ↗</a>
+      <a class="nav-link" href="./prototype.html">Original SVG prototype</a>
+    </nav>
+  </header>
+
+  <main class="shell" id="top">
+    <section class="intro">
+      <div>
+        <div class="kicker"><i class="live-dot" aria-hidden="true"></i> 10 SOURCE 3D CLIPS · REAL MOTION · MUSCLE MAPS</div>
+        <h1>See the movement.<br>Know the focus.</h1>
+        <p>This is a ten-move reference set using source skinned 3D clips from OpenGym3D—not a frame-accurate recreation of Leap Fitness’ Home Workout app. The character stays neutral; red and amber appear only on the per-exercise front/back map, based on the source catalog’s primary and supporting groups.</p>
+      </div>
+      <div class="count-badge">10 <span>3D exercise examples</span></div>
+    </section>
+
+    <section class="workbench" aria-label="Exercise viewer">
+      <div class="stage-card">
+        <div class="stage-head"><span id="stage-title">JUMPING JACK · SOURCE 3D MOTION</span><span class="status" id="render-status">Loading source motion</span></div>
+        <div id="viewport">
+          <div class="phase-overlay" aria-live="polite">
+            <div class="phase-kicker">MOVEMENT CUE</div>
+            <strong id="phase-title">Getting ready…</strong>
+            <span id="phase-cue">Loading the exercise preview.</span>
+          </div>
+          <div class="loading" id="loading"><div class="spinner" aria-hidden="true"></div><strong id="loading-title">Loading the source motion…</strong><small id="loading-note">OpenGym3D clips load on demand. Some previews need an internet connection.</small></div>
+        </div>
+        <div class="stage-foot">
+          <div class="legend" aria-label="Body map legend">
+            <span class="legend-item"><i class="swatch primary" aria-hidden="true"></i>Primary group</span>
+            <span class="legend-item"><i class="swatch secondary" aria-hidden="true"></i>Supporting</span>
+            <span class="legend-item"><i class="swatch rest" aria-hidden="true"></i>Other regions</span>
+          </div>
+          <span>3D model neutral · drag to orbit</span>
+        </div>
+        <div class="playbar">
+          <button class="play-button" id="play" type="button" aria-label="Pause animation" aria-pressed="true">Ⅱ</button>
+          <input class="scrub" id="scrub" type="range" min="0" max="1000" value="0" aria-label="Animation timeline">
+          <output class="time-readout" id="time-readout">0.0 / 0.0s</output>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <section class="side-card selected-card">
+          <div class="micro-label">Selected movement</div>
+          <div class="selected-title-row"><span class="selected-number" id="exercise-number">01</span><div><h2 id="exercise-title">Jumping Jack</h2><div class="selected-meta" id="exercise-meta">Cardio · Beginner</div></div></div>
+          <p id="exercise-description">A complete jumping-jack cycle: arms and feet open together, then return to the start.</p>
+          <span class="source-pill" id="motion-source">OpenGym3D · CC0-1.0 · local clip</span>
+        </section>
+        <section class="side-card muscle-card">
+          <div class="micro-label">Muscle-group focus</div>
+          <div class="muscle-row"><div class="muscle-row-label"><i class="swatch primary" aria-hidden="true"></i>Primary</div><div class="group-list" id="primary-groups"></div></div>
+          <div class="muscle-row"><div class="muscle-row-label"><i class="swatch secondary" aria-hidden="true"></i>Supporting</div><div class="group-list" id="secondary-groups"></div></div>
+          <div class="bodymap-wrap" id="bodymap" aria-label="Exercise-specific front and back muscle map"></div>
+          <p class="muscle-note">Red and amber reflect the source catalog’s listed primary and supporting groups. The schematic map is not measured muscle activation or a medical assessment; the 3D model stays neutral.</p>
+        </section>
+        <section class="side-card steps-card">
+          <h3 class="steps-heading">How to do it</h3>
+          <ol id="steps"></ol>
+        </section>
+        <section class="side-card controls-card">
+          <div>
+            <label class="control-label" for="speed"><span>Playback speed</span></label>
+            <select class="speed-select" id="speed"><option value="0.65">Slow · 0.65×</option><option value="1" selected>Normal · 1×</option><option value="1.25">Fast · 1.25×</option></select>
+          </div>
+          <div class="view-buttons" role="group" aria-label="Camera view">
+            <button class="view-button" type="button" data-view="front" aria-pressed="true">Front</button>
+            <button class="view-button" type="button" data-view="side" aria-pressed="false">Side</button>
+            <button class="view-button" type="button" data-view="reset" aria-pressed="false">Reset</button>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="library" aria-labelledby="library-heading">
+      <div class="library-head"><div><h2 id="library-heading">Choose an exercise</h2><p>Ten OpenGym3D source clips; each selection updates the cue and body map.</p></div><span class="library-count">10 real clips</span></div>
+      <div id="exercise-grid" role="group" aria-label="Ten exercises"></div>
+    </section>
+
+    <footer class="footer"><span>Motion is sourced, not hand-keyframed here. Coaching cues and the muscle map remain illustrative.</span><span><a href="https://github.com/AssiamahS/opengym3d" target="_blank" rel="noopener noreferrer">OpenGym3D source ↗</a> · <a href="./assets/3d/NOTICE.md">Asset & license notices</a></span></footer>
+  </main>
+</body>
+</html>
